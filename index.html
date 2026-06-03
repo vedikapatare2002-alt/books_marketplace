@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Products</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f1eb;
+      --surface: #faf8f5;
+      --ink: #1a1410;
+      --ink-muted: #7a6f64;
+      --accent: #b85c2c;
+      --accent-light: #f0e8df;
+      --border: #e0d8ce;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    header {
+      padding: 3.5rem 4rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .logo span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .tagline {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .enter-product-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      padding: 0.55rem 1.2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .enter-product-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .enter-product-btn svg {
+      width: 11px;
+      height: 11px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .shop-intro {
+      padding: 3.5rem 4rem 1.5rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      animation: fadeDown 0.7s 0.1s ease both;
+    }
+
+    .shop-intro h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+
+    .shop-intro h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .item-count {
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      padding-bottom: 0.4rem;
+    }
+
+    /* Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+      margin-top: 2.5rem;
+    }
+
+    .product-card {
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: cardIn 0.55s ease forwards;
+    }
+
+    .product-card:nth-child(1) { animation-delay: 0.15s; }
+    .product-card:nth-child(2) { animation-delay: 0.22s; }
+    .product-card:nth-child(3) { animation-delay: 0.29s; }
+    .product-card:nth-child(4) { animation-delay: 0.36s; }
+    .product-card:nth-child(5) { animation-delay: 0.43s; }
+    .product-card:nth-child(6) { animation-delay: 0.50s; }
+    .product-card:nth-child(7) { animation-delay: 0.57s; }
+    .product-card:nth-child(8) { animation-delay: 0.64s; }
+
+    .product-card:hover .img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .product-card:hover .add-btn {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .img-wrap {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--accent-light);
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: block;
+    }
+
+    .badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      font-weight: 500;
+    }
+
+    .card-body {
+      padding: 1.4rem 1.5rem 1.6rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .category {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-top: 0.1rem;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.55;
+      margin-top: 0.2rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .add-btn {
+      background: var(--ink);
+      color: var(--surface);
+      border: none;
+      padding: 0.55rem 1.1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease;
+    }
+
+    .add-btn:hover {
+      background: var(--accent);
+    }
+
+    footer {
+      padding: 2.5rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0;
+    }
+
+    .footer-note {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header, .shop-intro, footer { padding: 2rem 1.5rem; }
+      .shop-intro { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .header-right { gap: 1rem; }
+      .tagline { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Maison<span>Craft</span></div>
+  <div class="header-right">
+    <div class="tagline">Handcrafted · Thoughtfully Made</div>
+    <a href="add-product.html" class="enter-product-btn">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Enter Product
+    </a>
+  </div>
+</header>
+
+<div class="shop-intro">
+  <h1>Our <em>Collection</em></h1>
+  <div class="item-count">Loading…</div>
+</div>
+
+<div class="product-grid" id="grid"></div>
+
+<footer>
+  <div class="footer-note">© 2026 MaisonCraft</div>
+  <div class="footer-note">Free shipping on orders over $75</div>
+</footer>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxICIl2y4p8eSTGrHDArDNluDEadALOjEwUZ1wkdv9AtZsqdjZ1JMqGH0Yz-haUvH5C/exec';
+
+  function renderCard(p, index) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.style.animationDelay = (0.15 + index * 0.07) + 's';
+    const price = parseFloat(p.price);
+    const priceStr = isNaN(price) ? p.price : '$' + price.toFixed(2);
+    const badge = p.badge && String(p.badge).trim() ? `<span class="badge">${p.badge}</span>` : '';
+    card.innerHTML = `
+      <div class="img-wrap">
+        <img src="${p.img}" alt="${p.name}" loading="lazy"/>
+        ${badge}
+      </div>
+      <div class="card-body">
+        <div class="category">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="card-footer">
+          <div class="price">${priceStr}</div>
+          <button class="add-btn">Add to Cart</button>
+        </div>
+      </div>
+    `;
+    return card;
+  }
+
+  async function loadProducts() {
+    const grid = document.getElementById('grid');
+    const countEl = document.querySelector('.item-count');
+
+    try {
+      const res = await fetch(SHEET_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const products = await res.json();
+
+      countEl.textContent = products.length + ' product' + (products.length !== 1 ? 's' : '');
+      products.forEach((p, i) => grid.appendChild(renderCard(p, i)));
+    } catch (err) {
+      console.error('Failed to load products:', err);
+      grid.innerHTML = '<p style="padding:2rem 1.5rem;color:var(--ink-muted);font-size:0.85rem;">Unable to load products. Please try again later.</p>';
+    }
+  }
+
+  loadProducts();
+</script>
+</body>
+</html>
